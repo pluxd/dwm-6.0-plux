@@ -3,7 +3,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
+static const char font[]            = "-xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1";
 static const char normbordercolor[] = "#282828";
 static const char normbgcolor[]     = "#282828";
 static const char normfgcolor[]     = "#999999";

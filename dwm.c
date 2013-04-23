@@ -21,7 +21,6 @@
  * To understand everything else, start reading main().
  */
 #include <errno.h>
-#include <locale.h>
 #include <stdarg.h>
 #include <signal.h>
 #include <stdio.h>
@@ -178,6 +177,7 @@ static void die(const char *errstr, ...);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
+static int drawstring2b(Display *display, Drawable d, GC gc, int x, int y, const char *string, int length);
 static void drawsquare(Bool filled, Bool empty, Bool invert, unsigned long col[ColLast]);
 static void drawtext(const char *text, unsigned long col[ColLast], Bool invert);
 static void enternotify(XEvent *e);
@@ -227,6 +227,7 @@ static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static int textnw(const char *text, unsigned int len);
+static int textwidth2b(XFontStruct *font_struct, const char *string, int length);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
@@ -244,6 +245,7 @@ static void updatestatus(void);
 static void updatewindowtype(Client *c);
 static void updatetitle(Client *c);
 static void updatewmhints(Client *c);
+static int utf8toxchar2b(const char *intext, int inlen, XChar2b *outtext, int outlen);
 static void view(const Arg *arg);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
@@ -785,6 +787,59 @@ drawsquare(Bool filled, Bool empty, Bool invert, unsigned long col[ColLast]) {
 		XDrawRectangle(dpy, dc.drawable, dc.gc, dc.x+1, dc.y+1, x, x);
 }
 
+int
+utf8toxchar2b(const char *intext, int inlen, XChar2b *outtext, int outlen)
+{
+	int j, k;
+	for(j =0, k=0; j < inlen && k < outlen; j ++) {
+		unsigned char c = intext[j];
+		if (c < 128) {
+			outtext[k].byte1 = 0;
+			outtext[k].byte2 = c;
+			k++;
+		}
+		else if (c < 0xC0) {
+			/* we're inside a character we don't know */
+			continue;
+		}
+		else
+			switch(c & 0xF0) {
+				case 0xC0:
+				case 0xD0: /* two bytes 5+6 = 11 bits */
+					if (inlen < j + 1)
+						return k;
+					outtext[k].byte1 = (c & 0x1C) >> 2;
+					j++;
+					outtext[k].byte2 = ((c & 0x3) << 6) + (intext[j] & 0x3F);
+					k++;
+					break;
+				case 0xE0: /* three bytes 4+6+6 = 16 bits */
+					if (inlen < j + 2)
+						return k;
+					j++;
+					outtext[k].byte1 = ((c & 0xF) << 4) + ((intext[j] & 0x3C) >> 2);
+					c = intext[j];
+					j++;
+					outtext[k].byte2 = ((c & 0x3) << 6) + (intext[j] & 0x3F);
+					k++;
+					break;
+				case 0xFF:
+					/* the character uses more than 16 bits */
+					break;
+			}
+	}
+	return k;
+}
+
+int
+drawstring2b(Display *display, Drawable d, GC gc, int x, int y, const char *string, int length)
+{
+	size_t len = strlen(string);
+	XChar2b charbuf[len * sizeof(*string)];
+	size_t buflen = utf8toxchar2b(string, length, charbuf, len);
+	return XDrawString16(display, d, gc, x, y, charbuf, buflen);
+}
+
 void
 drawtext(const char *text, unsigned long col[ColLast], Bool invert) {
 	char buf[256];
@@ -809,7 +864,7 @@ drawtext(const char *text, unsigned long col[ColLast], Bool invert) {
 	if(dc.font.set)
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
 	else
-		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
+		drawstring2b(dpy, dc.drawable, dc.gc, x, y, buf, len);
 }
 
 void
@@ -1691,6 +1746,15 @@ tagmon(const Arg *arg) {
 }
 
 int
+textwidth2b(XFontStruct *font_struct, const char *string, int length)
+{
+	size_t len = strlen(string);
+	XChar2b charbuf[len * sizeof(*string)];
+	size_t buflen = utf8toxchar2b(string, length, charbuf, len);
+	return XTextWidth16(font_struct, charbuf, buflen);
+}
+
+int
 textnw(const char *text, unsigned int len) {
 	XRectangle r;
 
@@ -1698,7 +1762,8 @@ textnw(const char *text, unsigned int len) {
 		XmbTextExtents(dc.font.set, text, len, NULL, &r);
 		return r.width;
 	}
-	return XTextWidth(dc.font.xfont, text, len);
+	return textwidth2b(dc.font.xfont, text, len);
+
 }
 
 void
@@ -2132,7 +2197,7 @@ main(int argc, char *argv[]) {
 		die("dwm-"VERSION", © 2006-2011 dwm engineers, see LICENSE for details\n");
 	else if(argc != 1)
 		die("usage: dwm [-v]\n");
-	if(!setlocale(LC_CTYPE, "") || !XSupportsLocale())
+	if(!XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
 	if(!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display\n");
