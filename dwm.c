@@ -1029,14 +1029,7 @@ gettextprop(Window w, Atom atom, char *text, unsigned int size) {
 	XGetTextProperty(dpy, w, &name, atom);
 	if(!name.nitems)
 		return False;
-	if(name.encoding == XA_STRING)
-		strncpy(text, (char *)name.value, size - 1);
-	else {
-		if(XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success && n > 0 && *list) {
-			strncpy(text, *list, size - 1);
-			XFreeStringList(list);
-		}
-	}
+	strncpy(text, (char *)name.value, size - 1);
 	text[size - 1] = '\0';
 	XFree(name.value);
 	return True;
