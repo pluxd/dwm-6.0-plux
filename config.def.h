@@ -14,14 +14,17 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
+static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "trm", "web", "vim", "fs", "a", "b", "c" };
 
 static const Rule rules[] = {
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            True,        -1 },
-	//{ "Firefox",  NULL,       NULL,       1 << 8,       False,       -1 },
+	/* clas				instance    	title	tags mask	isfloating	monitor */
+	{ "st-256color",    "st-256color",  "st",   1,          False,      -1 },
+	{ "Surf",    		"surf",  		"surf", 1 << 1,     False,      -1 },
+	{ "Gvim",    		"gvim",  		NULL,	1 << 2,     False,      -1 },
+	{ "st-256color",	"st-256color", 	"vifm",	1 << 3,     False,      -1 },
 };
 
 /* layout(s) */
@@ -49,10 +52,10 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "urxvt", NULL };
-static const char *browsercmd[] = { "firefox", NULL };
+static const char *termcmd[]  = { "st", NULL };
+static const char *browsercmd[] = { "surf", NULL };
 static const char *editorcmd[] = { "gvim", NULL };
-static const char *fileexplorercmd[] = { "urxvt", "-title", "vifm", "-e", "vifm",  NULL };
+static const char *fileexplorercmd[] = { "st", "-t", "vifm", "-e", "vifm",  NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
