@@ -1165,6 +1165,10 @@ manage(Window w, XWindowAttributes *wa) {
 	arrange(c->mon);
 	XMapWindow(dpy, c->win);
 	focus(NULL);
+	if(viewontag && c->tags > 0) {
+		Arg a = {.ui = c->tags};
+		view(&a);
+	}
 }
 
 void
