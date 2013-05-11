@@ -35,7 +35,7 @@ static const Bool resizehints = False; /* True means respect size hints in tiled
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "\u2560"  tile },    /* first entry is default */
+	{ "\u2560", tile },    /* first entry is default */
 	{ "~",      NULL },    /* no layout function means floating behavior */
 	{ "|",      monocle },
 };
