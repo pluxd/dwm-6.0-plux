@@ -17,14 +17,15 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-static const char *tags[] = { "trm", "web", "vim", "fs", "a", "b", "c" };
+static const char *tags[] = { "trm", "web", "vim", "fs", "dcm" };
 
 static const Rule rules[] = {
-	/* clas				instance    	title	tags mask	isfloating	monitor */
+	/* class			instance    	title	tags mask	isfloating	monitor */
 	{ "st-256color",    "st-256color",  "st",   1,          False,      -1 },
 	{ "Surf",    		"surf",  		"surf", 1 << 1,     False,      -1 },
 	{ "Gvim",    		"gvim",  		NULL,	1 << 2,     False,      -1 },
 	{ "st-256color",	"st-256color", 	"vifm",	1 << 3,     False,      -1 },
+	{ "MuPDF",			"mupdf", 		NULL,	1 << 4,     False,      -1 },
 };
 
 /* layout(s) */
