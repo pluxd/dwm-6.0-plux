@@ -17,7 +17,7 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-static const char *tags[] = { "trm", "web", "vim", "fs", "dcm" };
+static const char *tags[] = { "trm", "web", "vim", "fs", "dcm", "\u03b1", "\u03b2", "\u03b3" };
 
 static const Rule rules[] = {
 	/* class			instance    	title	tags mask	isfloating	monitor */
@@ -35,7 +35,7 @@ static const Bool resizehints = False; /* True means respect size hints in tiled
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "#",      tile },    /* first entry is default */
+	{ "\u2560"  tile },    /* first entry is default */
 	{ "~",      NULL },    /* no layout function means floating behavior */
 	{ "|",      monocle },
 };
