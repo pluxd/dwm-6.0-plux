@@ -52,14 +52,14 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[] = { "surf", NULL };
+static const char *browsercmd[] = { "firefox", NULL };
 static const char *editorcmd[] = { "gvim", NULL };
 static const char *fileexplorercmd[] = { "st", "-t", "vifm", "-e", "vifm",  NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ 0,                       XF86XK_AudioRaiseVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/volinc.sh") },
-	{ 0,                       XF86XK_AudioLowerVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/voldec.sh") },
+//	{ 0,                       XF86XK_AudioRaiseVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/volinc.sh") },
+//	{ 0,                       XF86XK_AudioLowerVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/voldec.sh") },
 	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = editorcmd } },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
