@@ -17,11 +17,7 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-<<<<<<< HEAD
 static const char *tags[] = { "trm", "web", "ed", "\u03b1", "\u03b2", "\u03b3" };
-=======
-static const char *tags[] = { "trm", "web", "ed", "a", "b", "c" };
->>>>>>> 00-dwm-6.0-initconfig
 
 static const Rule rules[] = {
 	/* class			instance    	title	tags mask	isfloating	monitor */
