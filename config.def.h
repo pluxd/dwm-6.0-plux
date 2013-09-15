@@ -4,11 +4,11 @@
 
 /* appearance */
 static const char font[]            = "-xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1";
-static const char normbordercolor[] = "#282828";
-static const char normbgcolor[]     = "#282828";
+static const char normbordercolor[] = "#202020";
+static const char normbgcolor[]     = "#202020";
 static const char normfgcolor[]     = "#999999";
-static const char selbordercolor[]  = "#282828";
-static const char selbgcolor[]      = "#282828";
+static const char selbordercolor[]  = "#202020";
+static const char selbgcolor[]      = "#202020";
 static const char selfgcolor[]      = "#729fcf";
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
