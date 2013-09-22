@@ -14,7 +14,7 @@ static const char colors[NUMCOLORS][ColLast][8] = {
    { "#202020", "#4e9a06", "#202020" }, // 5 = ok
 };
 static const char font[]            = "-xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1";
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
