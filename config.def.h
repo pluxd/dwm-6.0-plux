@@ -3,13 +3,17 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
+#define NUMCOLORS 6
+static const char colors[NUMCOLORS][ColLast][8] = {
+   // border   	foreground background
+   { "#202020", "#555753", "#202020" }, // 0 = normal
+   { "#202020", "#eeeeec", "#202020" }, // 1 = selected
+   { "#202020", "#fce94f", "#202020" }, // 2 = warning
+   { "#cc0000", "#eeeeec", "#cc0000" }, // 3 = error
+   { "#202020", "#bbbbbb", "#202020" }, // 4 = info
+   { "#202020", "#4e9a06", "#202020" }, // 5 = ok
+};
 static const char font[]            = "-xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1";
-static const char normbordercolor[] = "#202020";
-static const char normbgcolor[]     = "#202020";
-static const char normfgcolor[]     = "#999999";
-static const char selbordercolor[]  = "#202020";
-static const char selbgcolor[]      = "#202020";
-static const char selfgcolor[]      = "#729fcf";
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
@@ -50,7 +54,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],"-sb", colors[1][ColBG], "-sf", colors[1][ColFG], NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "firefox", NULL };
 static const char *editorcmd[] = { "gvim", NULL };
