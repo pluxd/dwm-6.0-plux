@@ -786,7 +786,7 @@ drawbar(Monitor *m) {
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
 		if(m->sel) {
-			col = m == selmon ? dc.colors[1] : dc.colors[0];
+			col = m == selmon ? dc.colors[4] : dc.colors[0];
 			drawtext(m->sel->name, col, True);
 			drawsquare(m->sel->isfixed, m->sel->isfloating, col);
 		}
