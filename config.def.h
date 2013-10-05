@@ -9,7 +9,7 @@ static const char normbgcolor[]     = "#202020";
 static const char normfgcolor[]     = "#999999";
 static const char selbordercolor[]  = "#202020";
 static const char selbgcolor[]      = "#202020";
-static const char selfgcolor[]      = "#729fcf";
+static const char selfgcolor[]      = "#eeeeec";
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
@@ -17,13 +17,15 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-static const char *tags[] = { "trm", "web", "ed", "\u03b1", "\u03b2", "\u03b3" };
+static const char *tags[] = { "trm", "web", "ed", "rdp", "\u03b1", "\u03b2", "\u03b3", "\u03be", "\u03c9" };
 
 static const Rule rules[] = {
 	/* class			instance    	title	tags mask	isfloating	monitor */
-	{ "st-256color",    "st-256color",  "st",   1,          False,      -1 },
+	{ "st-256color",    "st-256color",  NULL,   1,          False,      -1 },
 	{ "Firefox",   		NULL,  			NULL, 	1 << 1,     False,      -1 },
+	{ "Emacs",    		"emacs",  		NULL,	1 << 2,     False,      -1 },
 	{ "Gvim",    		"gvim",  		NULL,	1 << 2,     False,      -1 },
+	{ "xfreerdp",  		"xfreerdp",		NULL,	1 << 3,     False,      -1 },
 };
 
 /* layout(s) */
@@ -53,16 +55,18 @@ static const Layout layouts[] = {
 static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "firefox", NULL };
-static const char *editorcmd[] = { "gvim", NULL };
-static const char *fileexplorercmd[] = { "st", "-t", "vifm", "-e", "vifm",  NULL };
+static const char *vimcmd[] = { "gvim", NULL };
+static const char *emacscmd[] = { "emacs", NULL };
+static const char *volraisecmd[] = { "amixer", "-c", "1", "set", "Master", "1+", "unmute",  NULL };
+static const char *vollowercmd[] = { "amixer", "-c", "1", "set", "Master", "1-", "unmute",  NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-//	{ 0,                       XF86XK_AudioRaiseVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/volinc.sh") },
-//	{ 0,                       XF86XK_AudioLowerVolume,      spawn,          SHCMD("$HOME/.dwm/scripts/voldec.sh") },
+	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = volraisecmd } },
+	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = vollowercmd } },
 	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browsercmd } },
-	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = editorcmd } },
-	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
+	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vimcmd } },
+	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
