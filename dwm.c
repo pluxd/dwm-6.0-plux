@@ -743,7 +743,7 @@ drawbar(Monitor *m) {
 	dc.x += dc.w;
 	x = dc.x;
 	if(m == selmon) { /* status is only drawn on selected monitor */
-		dc.w = TEXTW(stext);
+		dc.w = textnw(stext, strlen(stext)); // no padding
 		dc.x = m->ww - dc.w;
 		if(dc.x < x) {
 			dc.x = x;
@@ -775,9 +775,7 @@ drawbars(void) {
 		drawbar(m);
 }
 
-void
 drawcoloredtext(char *text) {
-	Bool first=True;
 	char *buf = text, *ptr = buf, c = 1;
 	unsigned long *col = dc.colors[0];
 	int i, ox = dc.x;
@@ -789,19 +787,14 @@ drawcoloredtext(char *text) {
 		*ptr=0;
 		if( i ) {
 			dc.w = selmon->ww - dc.x;
-			drawtext(buf, col, first);
-			dc.x += textnw(buf, i) + textnw(&c,1);
-			if( first ) dc.x += ( dc.font.ascent + dc.font.descent ) / 2;
-			first = False;
-		} else if( first ) {
-			ox = dc.x += textnw(&c,1);
+			drawtext(buf, col, False);
+			dc.x += textnw(buf, i);
 		}
 		*ptr = c;
 		col = dc.colors[ c-1 ];
 		buf = ++ptr;
 	}
-	if( !first ) dc.x-=(dc.font.ascent+dc.font.descent)/2;
-	drawtext(buf, col, True);
+	drawtext(buf, col, False);
 	dc.x = ox;
 }
 
@@ -1783,14 +1776,27 @@ textwidth2b(XFontStruct *font_struct, const char *string, int length)
 
 int
 textnw(const char *text, unsigned int len) {
+	// remove non-printing color codes before calculating width
+	char *ptr = (char *) text;
+	unsigned int i, ibuf, lenbuf=len;
+	char buf[len+1];
 	XRectangle r;
 
+	for(i=0, ibuf=0; *ptr && i<len; i++, ptr++) {
+		if(*ptr <= NUMCOLORS && *ptr > 0) {
+			if (i < len) { lenbuf--; }
+		} else {
+			buf[ibuf]=*ptr;
+			ibuf++;
+		}
+	}
+	buf[ibuf]=0;
+
 	if(dc.font.set) {
-		XmbTextExtents(dc.font.set, text, len, NULL, &r);
+		XmbTextExtents(dc.font.set, buf, lenbuf, NULL, &r);
 		return r.width;
 	}
-	return textwidth2b(dc.font.xfont, text, len);
-
+	return XTextWidth(dc.font.xfont, buf, lenbuf);
 }
 
 void
