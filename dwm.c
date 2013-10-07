@@ -230,6 +230,7 @@ static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static int textnw(const char *text, unsigned int len);
+static int textnwst(const char *text, unsigned int len);
 static int textwidth2b(XFontStruct *font_struct, const char *string, int length);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
@@ -769,11 +770,11 @@ drawbar(Monitor *m) {
 		dc.x += dc.w;
 	}
 	dc.w = blw = TEXTW(m->ltsymbol);
-	drawtext(m->ltsymbol, dc.colors[4], False);
+	drawtext(m->ltsymbol, dc.colors[4], True);
 	dc.x += dc.w;
 	x = dc.x;
 	if(m == selmon) { /* status is only drawn on selected monitor */
-		dc.w = textnw(stext, strlen(stext)); // no padding
+		dc.w = textnwst(stext, strlen(stext)); // no padding
 		dc.x = m->ww - dc.w;
 		if(dc.x < x) {
 			dc.x = x;
@@ -791,7 +792,7 @@ drawbar(Monitor *m) {
 			drawsquare(m->sel->isfixed, m->sel->isfloating, col);
 		}
 		else
-			drawtext(NULL, dc.colors[0], False);
+			drawtext(NULL, dc.colors[0], True);
 	}
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
@@ -818,7 +819,7 @@ drawcoloredtext(char *text) {
 		if( i ) {
 			dc.w = selmon->ww - dc.x;
 			drawtext(buf, col, False);
-			dc.x += textnw(buf, i);
+			dc.x += textnwst(buf, i);
 		}
 		*ptr = c;
 		col = dc.colors[ c-1 ];
@@ -1809,6 +1810,18 @@ textwidth2b(XFontStruct *font_struct, const char *string, int length)
 
 int
 textnw(const char *text, unsigned int len) {
+	XRectangle r;
+
+	if(dc.font.set) {
+		XmbTextExtents(dc.font.set, text, len, NULL, &r);
+		return r.width;
+	}
+	return textwidth2b(dc.font.xfont, text, len);
+
+}
+
+int
+textnwst(const char *text, unsigned int len) {
 	// remove non-printing color codes before calculating width
 	char *ptr = (char *) text;
 	unsigned int i, ibuf, lenbuf=len;
@@ -1829,7 +1842,7 @@ textnw(const char *text, unsigned int len) {
 		XmbTextExtents(dc.font.set, buf, lenbuf, NULL, &r);
 		return r.width;
 	}
-	return XTextWidth(dc.font.xfont, buf, lenbuf);
+	return textwidth2b(dc.font.xfont, buf, lenbuf);
 }
 
 void
