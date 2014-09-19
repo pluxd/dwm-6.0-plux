@@ -17,7 +17,7 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 
 /* tagging */
-static const char *tags[] = { "trm", "web", "ed", "rdp", "\u03b1", "\u03b2", "\u03b3", "\u03be", "\u03c9" };
+static const char *tags[] = { "trm", "web", "rdp", "\u03b1", "\u03b2", "\u03b3", "\u03bb", "\u03bc", "\u03c9" };
 
 static const Rule rules[] = {
 	/* class			instance    	title	tags mask	isfloating	monitor */
