@@ -23,7 +23,7 @@ static const Rule rules[] = {
 	/* class			instance    	title	tags mask	isfloating	monitor */
 	{ "st-256color",    "st-256color",  NULL,   1,          False,      -1 },
 	{ "Firefox",   		NULL,  			NULL, 	1 << 1,     False,      -1 },
-	{ "xfreerdp",  		"xfreerdp",		NULL,	1 << 3,     False,      -1 },
+	{ "xfreerdp",  		"xfreerdp",		NULL,	1 << 2,     False,      -1 },
 };
 
 /* layout(s) */
